@@ -10,6 +10,7 @@ Run with: streamlit run app.py
 import random
 import os
 import time
+import requests
 from dotenv import load_dotenv
 import streamlit as st
 import plotly.express as px
@@ -20,12 +21,6 @@ from personality_engine import detect_personality, ADVISOR_TONES
 from nudge_engine import generate_nudge
 
 load_dotenv()
-
-# Twilio Integration
-try:
-    from twilio.rest import Client
-except ImportError:
-    Client = None
 
 # ── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -89,30 +84,38 @@ DEFAULT_CSV = "data/mouni.csv"
 # ══════════════════════════════════════════════════════════════════════════════
 
 def send_otp_sms(phone_number: str, otp: str):
-    """Send OTP via Twilio SMS."""
-    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-    from_number = os.getenv("TWILIO_PHONE_NUMBER")
+    """Send OTP via Exotel SMS."""
+    api_key = os.getenv("EXOTEL_API_KEY")
+    api_token = os.getenv("EXOTEL_API_TOKEN")
+    account_sid = os.getenv("EXOTEL_ACCOUNT_SID")
+    subdomain = os.getenv("EXOTEL_SUBDOMAIN", "api.exotel.com")
+    # Sender ID or ExoPhone
+    from_id = os.getenv("EXOTEL_SENDER_ID")
 
-    if not all([account_sid, auth_token, from_number]):
-        return False, "Twilio credentials missing. Please check your .env file."
-
-    if not Client:
-        return False, "Twilio library not installed."
+    if not all([api_key, api_token, account_sid, from_id]):
+        return False, "Exotel credentials missing (API Key, Token, SID, or Sender ID). Check .env."
 
     try:
-        client = Client(account_sid, auth_token)
-        # Assuming Indian numbers (+91) if 10 digits
-        to_number = f"+91{phone_number}" if len(phone_number) == 10 else phone_number
+        # Exotel expects E.164 format or 10 digits
+        to_number = phone_number
 
-        message = client.messages.create(
-            body=f"Your Budget Nudge Agent OTP is: {otp}. Valid for 5 minutes.",
-            from_=from_number,
-            to=to_number
-        )
-        return True, f"OTP sent to {to_number}"
+        url = f"https://{api_key}:{api_token}@{subdomain}/v1/Accounts/{account_sid}/Sms/send.json"
+
+        payload = {
+            "From": from_id,
+            "To": to_number,
+            "Body": f"Your Budget Nudge Agent OTP is: {otp}. Valid for 5 minutes.",
+        }
+
+        response = requests.post(url, data=payload)
+
+        if response.status_code in [200, 201]:
+            return True, f"OTP sent to {to_number} via Exotel"
+        else:
+            return False, f"Exotel Error ({response.status_code}): {response.text}"
+
     except Exception as e:
-        return False, f"SMS Error: {str(e)}"
+        return False, f"Exotel Connection Error: {str(e)}"
 
 
 def otp_login_screen():
