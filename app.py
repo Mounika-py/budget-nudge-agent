@@ -10,7 +10,9 @@ Run with: streamlit run app.py
 import random
 import os
 import time
-import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 import streamlit as st
 import plotly.express as px
@@ -70,11 +72,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── Phone → CSV Mapping ───────────────────────────────────────────────────────
-PHONE_TO_CSV = {
-    "9999999999": "data/mouni.csv",
-    "8888888888": "data/mouni.csv",  # demo: same file for multiple phones
-    "7777777777": "data/mouni.csv",
+# ── Email → CSV Mapping ───────────────────────────────────────────────────────
+EMAIL_TO_CSV = {
+    "mouni@example.com": "data/mouni.csv",
+    "demo@example.com": "data/mouni.csv",
 }
 DEFAULT_CSV = "data/mouni.csv"
 
@@ -83,39 +84,47 @@ DEFAULT_CSV = "data/mouni.csv"
 # SECTION 1: OTP LOGIN
 # ══════════════════════════════════════════════════════════════════════════════
 
-def send_otp_sms(phone_number: str, otp: str):
-    """Send OTP via Exotel SMS."""
-    api_key = os.getenv("EXOTEL_API_KEY")
-    api_token = os.getenv("EXOTEL_API_TOKEN")
-    account_sid = os.getenv("EXOTEL_ACCOUNT_SID")
-    subdomain = os.getenv("EXOTEL_SUBDOMAIN", "api.exotel.com")
-    # Sender ID or ExoPhone
-    from_id = os.getenv("EXOTEL_SENDER_ID")
+def send_otp_email(receiver_email: str, otp: str):
+    """Send OTP via Gmail SMTP."""
+    sender_email = os.getenv("EMAIL_SENDER")
+    sender_password = os.getenv("EMAIL_APP_PASSWORD")
 
-    if not all([api_key, api_token, account_sid, from_id]):
-        return False, "Exotel credentials missing (API Key, Token, SID, or Sender ID). Check .env."
+    if not sender_email or not sender_password:
+        return False, "Email credentials missing (EMAIL_SENDER or EMAIL_APP_PASSWORD). Check .env."
 
     try:
-        # Exotel expects E.164 format or 10 digits
-        to_number = phone_number
+        # SMTP Server setup
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
 
-        url = f"https://{api_key}:{api_token}@{subdomain}/v1/Accounts/{account_sid}/Sms/send.json"
+        message = MIMEMultipart()
+        message["From"] = sender_email
+        message["To"] = receiver_email
+        message["Subject"] = "Your Budget Nudge Agent OTP"
 
-        payload = {
-            "From": from_id,
-            "To": to_number,
-            "Body": f"Your Budget Nudge Agent OTP is: {otp}. Valid for 5 minutes.",
-        }
+        body = f"""
+        <html>
+        <body>
+            <h3>💰 Budget Nudge Agent</h3>
+            <p>Your Secure OTP is: <b>{otp}</b></p>
+            <p>This code is valid for 5 minutes.</p>
+            <hr/>
+            <p><small>If you didn't request this, please ignore this email.</small></p>
+        </body>
+        </html>
+        """
+        message.attach(MIMEText(body, "html"))
 
-        response = requests.post(url, data=payload)
+        # Connect and send
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.send_message(message)
+        server.quit()
 
-        if response.status_code in [200, 201]:
-            return True, f"OTP sent to {to_number} via Exotel"
-        else:
-            return False, f"Exotel Error ({response.status_code}): {response.text}"
-
+        return True, f"OTP sent to {receiver_email}"
     except Exception as e:
-        return False, f"Exotel Connection Error: {str(e)}"
+        return False, f"Email Error: {str(e)}"
 
 
 def otp_login_screen():
@@ -126,42 +135,41 @@ def otp_login_screen():
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        phone = st.text_input(
-            "📱 Enter your phone number",
-            placeholder="e.g. 9999999999",
-            max_chars=10,
+        email = st.text_input(
+            "📧 Enter your email",
+            placeholder="e.g. user@example.com",
         )
 
         if st.button("📨 Send OTP", use_container_width=True, type="primary"):
-            if len(phone) == 10 and phone.isdigit():
+            if "@" in email and "." in email:
                 otp = str(random.randint(1000, 9999))
                 st.session_state["otp"] = otp
-                st.session_state["phone"] = phone
+                st.session_state["email"] = email
 
-                # Real SMS Attempt
-                success, msg = send_otp_sms(phone, otp)
+                # Real Email Attempt
+                success, msg = send_otp_email(email, otp)
 
                 if success:
                     st.success(f"✅ {msg}")
                     st.session_state["otp_sent"] = True
-                    st.session_state["real_sms_sent"] = True
+                    st.session_state["real_otp_sent"] = True
                 else:
-                    st.warning(f"⚠️ Could not send real SMS: {msg}")
+                    st.warning(f"⚠️ Could not send real Email: {msg}")
                     st.info("💡 Falling back to on-screen OTP for demo purposes.")
                     st.session_state["otp_sent"] = True
-                    st.session_state["real_sms_sent"] = False
+                    st.session_state["real_otp_sent"] = False
             else:
-                st.error("❌ Please enter a valid 10-digit phone number.")
+                st.error("❌ Please enter a valid email address.")
 
         # OTP verification step
         if st.session_state.get("otp_sent"):
-            if not st.session_state.get("real_sms_sent"):
+            if not st.session_state.get("real_otp_sent"):
                 st.info(
                     f"🔑 **On-Screen OTP:** `{st.session_state['otp']}`",
                     icon="ℹ️",
                 )
             else:
-                st.info("📩 Check your mobile for the OTP.")
+                st.info("📩 Check your inbox for the OTP.")
             entered_otp = st.text_input("🔢 Enter OTP", max_chars=4, placeholder="4-digit OTP")
 
             if st.button("✅ Verify OTP", use_container_width=True):
@@ -178,9 +186,9 @@ def otp_login_screen():
                     time.sleep(1)
 
                     st.session_state["logged_in"] = True
-                    # Resolve CSV path from phone number
-                    csv_path = PHONE_TO_CSV.get(
-                        st.session_state["phone"], DEFAULT_CSV
+                    # Resolve CSV path from email
+                    csv_path = EMAIL_TO_CSV.get(
+                        st.session_state["email"], DEFAULT_CSV
                     )
                     st.session_state["csv_path"] = csv_path
                     st.session_state["extra_food"] = 0.0  # simulation counter
@@ -212,7 +220,7 @@ def dashboard_screen():
         st.markdown("# 💰")
     with col_title:
         st.markdown("## AI-Powered Behavioral Budget Nudge Agent")
-        st.caption(f"📱 Logged in as: +91-{st.session_state.get('phone', 'N/A')} &nbsp;|&nbsp; 📅 Jan 2024")
+        st.caption(f"📧 Logged in as: {st.session_state.get('email', 'N/A')} &nbsp;|&nbsp; 📅 Jan 2024")
     with col_logout:
         if st.button("🚪 Logout"):
             for key in list(st.session_state.keys()):
