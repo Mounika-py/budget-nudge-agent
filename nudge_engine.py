@@ -5,28 +5,57 @@ Generates AI-powered (or rule-based fallback) behavioral nudges with multimedia 
 """
 
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ── Multimedia Assets ─────────────────────────────────────────────────────────
 
-# Using reliable memegen.link URLs for trending/classic memes
-# memegen.link is highly stable for automated tools.
-RISK_ASSETS = {
+# Default Remote Assets
+DEFAULT_ASSETS = {
     "Low": {
-        "meme": "https://api.memegen.link/images/stonks.png",  # Stonks
+        "meme": "https://api.memegen.link/images/stonks.png",
         "sound": "https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg",
     },
     "Medium": {
-        "meme": "https://api.memegen.link/images/fine.png",  # This is Fine
+        "meme": "https://api.memegen.link/images/fine.png",
         "sound": "https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
     },
     "High": {
-        "meme": "https://api.memegen.link/images/ds.png",  # Disappointed Stock Guy (ds)
+        "meme": "https://api.memegen.link/images/ds.png",
         "sound": "https://actions.google.com/sounds/v1/emergency/emergency_siren_short_burst.ogg",
     },
 }
+
+def get_assets(risk_level: str) -> dict:
+    """
+    Get meme and sound for a given risk level.
+    Prioritizes local files in assets/memes and assets/sounds.
+    """
+    level_lower = risk_level.lower()
+
+    # Potential local paths
+    local_meme = None
+    for ext in ['png', 'jpg', 'jpeg', 'gif', 'webp']:
+        path = Path(f"assets/memes/{level_lower}.{ext}")
+        if path.exists():
+            local_meme = str(path)
+            break
+
+    local_sound = None
+    for ext in ['mp3', 'wav', 'ogg']:
+        path = Path(f"assets/sounds/{level_lower}.{ext}")
+        if path.exists():
+            local_sound = str(path)
+            break
+
+    defaults = DEFAULT_ASSETS.get(risk_level, DEFAULT_ASSETS["Low"])
+
+    return {
+        "meme": local_meme if local_meme else defaults["meme"],
+        "sound": local_sound if local_sound else defaults["sound"]
+    }
 
 # ── Rule-based nudge library ──────────────────────────────────────────────────
 
@@ -137,7 +166,7 @@ def generate_nudge(
     else:
         nudge_text = _rule_based_nudge(risk_level, tone)
 
-    assets = RISK_ASSETS.get(risk_level, RISK_ASSETS["Low"])
+    assets = get_assets(risk_level)
 
     return {
         "text": nudge_text,

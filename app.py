@@ -351,7 +351,8 @@ def dashboard_screen():
 
         # Trigger Notification & Sound on generation
         st.toast(nudge_data["text"], icon="🚨" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "✅")
-        st.audio(nudge_data["sound"], format="audio/ogg", autoplay=True)
+        # Let Streamlit infer the format (supports local paths and URLs)
+        st.audio(nudge_data["sound"], autoplay=True)
 
     with nudge_col2:
         nudge_data = st.session_state.get("nudge_data", {})
