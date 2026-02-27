@@ -10,6 +10,7 @@ Run with: streamlit run app.py
 import random
 import os
 import time
+from dotenv import load_dotenv
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -17,6 +18,8 @@ import pandas as pd
 from risk_engine import load_transactions, calculate_analytics, get_gamification_level
 from personality_engine import detect_personality, ADVISOR_TONES
 from nudge_engine import generate_nudge
+
+load_dotenv()
 
 # Twilio Integration
 try:
