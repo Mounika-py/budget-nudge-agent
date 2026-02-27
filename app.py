@@ -18,6 +18,12 @@ from risk_engine import load_transactions, calculate_analytics, get_gamification
 from personality_engine import detect_personality, ADVISOR_TONES
 from nudge_engine import generate_nudge
 
+# Twilio Integration
+try:
+    from twilio.rest import Client
+except ImportError:
+    Client = None
+
 # ── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Budget Nudge Agent 💰",
@@ -79,6 +85,33 @@ DEFAULT_CSV = "data/mouni.csv"
 # SECTION 1: OTP LOGIN
 # ══════════════════════════════════════════════════════════════════════════════
 
+def send_otp_sms(phone_number: str, otp: str):
+    """Send OTP via Twilio SMS."""
+    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+    from_number = os.getenv("TWILIO_PHONE_NUMBER")
+
+    if not all([account_sid, auth_token, from_number]):
+        return False, "Twilio credentials missing. Please check your .env file."
+
+    if not Client:
+        return False, "Twilio library not installed."
+
+    try:
+        client = Client(account_sid, auth_token)
+        # Assuming Indian numbers (+91) if 10 digits
+        to_number = f"+91{phone_number}" if len(phone_number) == 10 else phone_number
+
+        message = client.messages.create(
+            body=f"Your Budget Nudge Agent OTP is: {otp}. Valid for 5 minutes.",
+            from_=from_number,
+            to=to_number
+        )
+        return True, f"OTP sent to {to_number}"
+    except Exception as e:
+        return False, f"SMS Error: {str(e)}"
+
+
 def otp_login_screen():
     """Render the OTP login UI."""
     st.markdown("## 💰 Budget Nudge Agent")
@@ -98,17 +131,31 @@ def otp_login_screen():
                 otp = str(random.randint(1000, 9999))
                 st.session_state["otp"] = otp
                 st.session_state["phone"] = phone
-                st.session_state["otp_sent"] = True
-                st.success(f"✅ OTP sent to +91-{phone}")
+
+                # Real SMS Attempt
+                success, msg = send_otp_sms(phone, otp)
+
+                if success:
+                    st.success(f"✅ {msg}")
+                    st.session_state["otp_sent"] = True
+                    st.session_state["real_sms_sent"] = True
+                else:
+                    st.warning(f"⚠️ Could not send real SMS: {msg}")
+                    st.info("💡 Falling back to on-screen OTP for demo purposes.")
+                    st.session_state["otp_sent"] = True
+                    st.session_state["real_sms_sent"] = False
             else:
                 st.error("❌ Please enter a valid 10-digit phone number.")
 
         # OTP verification step
         if st.session_state.get("otp_sent"):
-            st.info(
-                f"🔑 **Demo OTP (visible for hackathon):** `{st.session_state['otp']}`",
-                icon="ℹ️",
-            )
+            if not st.session_state.get("real_sms_sent"):
+                st.info(
+                    f"🔑 **On-Screen OTP:** `{st.session_state['otp']}`",
+                    icon="ℹ️",
+                )
+            else:
+                st.info("📩 Check your mobile for the OTP.")
             entered_otp = st.text_input("🔢 Enter OTP", max_chars=4, placeholder="4-digit OTP")
 
             if st.button("✅ Verify OTP", use_container_width=True):
