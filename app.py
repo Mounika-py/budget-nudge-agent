@@ -9,6 +9,7 @@ Run with: streamlit run app.py
 
 import random
 import os
+import time
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -112,6 +113,17 @@ def otp_login_screen():
 
             if st.button("✅ Verify OTP", use_container_width=True):
                 if entered_otp == st.session_state["otp"]:
+                    # Connection Simulation
+                    with st.status("🔗 Connecting to food platforms...", expanded=True) as status:
+                        platforms = ["Swiggy", "Zomato", "Blinkit", "EatClub"]
+                        for p in platforms:
+                            st.write(f"🔄 Fetching data from {p}...")
+                            time.sleep(0.6)
+                        status.update(label="✅ All platforms connected!", state="complete", expanded=False)
+
+                    st.balloons()
+                    time.sleep(1)
+
                     st.session_state["logged_in"] = True
                     # Resolve CSV path from phone number
                     csv_path = PHONE_TO_CSV.get(
@@ -266,24 +278,34 @@ def dashboard_screen():
         )
         generate_btn = st.button("⚡ Generate Nudge", use_container_width=True, type="primary")
 
-    if generate_btn or "nudge_text" not in st.session_state:
-        nudge_text, used_ai = generate_nudge(
+    if generate_btn or "nudge_data" not in st.session_state:
+        nudge_data = generate_nudge(
             risk_score=risk_score,
             risk_level=risk_level,
             personality=personality_data["name"],
             overspend_amount=analytics["overspend_amount"],
             tone=selected_tone,
         )
-        st.session_state["nudge_text"] = nudge_text
-        st.session_state["used_ai"] = used_ai
+        st.session_state["nudge_data"] = nudge_data
+
+        # Trigger Notification & Sound on generation
+        st.toast(nudge_data["text"], icon="🚨" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "✅")
+        st.audio(nudge_data["sound"], format="audio/ogg", autoplay=True)
 
     with nudge_col2:
-        ai_badge = "🤖 AI-Generated" if st.session_state.get("used_ai") else "📋 Rule-Based"
+        nudge_data = st.session_state.get("nudge_data", {})
+        ai_badge = "🤖 AI-Generated" if nudge_data.get("used_ai") else "📋 Rule-Based"
         st.caption(ai_badge)
-        st.markdown(
-            f'<div class="nudge-box">"{st.session_state.get("nudge_text", "")}"</div>',
-            unsafe_allow_html=True,
-        )
+
+        n_col1, n_col2 = st.columns([2, 1])
+        with n_col1:
+            st.markdown(
+                f'<div class="nudge-box">"{nudge_data.get("text", "")}"</div>',
+                unsafe_allow_html=True,
+            )
+        with n_col2:
+            if nudge_data.get("image"):
+                st.image(nudge_data["image"], use_container_width=True)
 
     st.markdown("---")
 
@@ -293,21 +315,21 @@ def dashboard_screen():
     sim_col1, sim_col2 = st.columns([1, 3])
     with sim_col1:
         sim_amount = st.number_input("Simulate order (₹)", min_value=100, max_value=2000, value=500, step=100)
-        sim_platform = st.selectbox("Platform", ["Swiggy", "Zomato", "Blinkit"])
+        sim_platform = st.selectbox("Platform", ["Swiggy", "Zomato", "Blinkit", "EatClub"])
 
         if st.button(f"🛵 Add ₹{sim_amount} {sim_platform} Order", use_container_width=True):
             st.session_state["extra_food"] = st.session_state.get("extra_food", 0.0) + sim_amount
             # Clear cached nudge so it regenerates
-            if "nudge_text" in st.session_state:
-                del st.session_state["nudge_text"]
+            if "nudge_data" in st.session_state:
+                del st.session_state["nudge_data"]
             st.rerun()
 
         if st.session_state.get("extra_food", 0) > 0:
             st.warning(f"⚡ Simulated: +₹{st.session_state['extra_food']:,.0f} food spend added")
             if st.button("↩️ Reset Simulation"):
                 st.session_state["extra_food"] = 0.0
-                if "nudge_text" in st.session_state:
-                    del st.session_state["nudge_text"]
+                if "nudge_data" in st.session_state:
+                    del st.session_state["nudge_data"]
                 st.rerun()
 
     with sim_col2:
