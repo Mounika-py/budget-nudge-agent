@@ -15,6 +15,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 import streamlit as st
+import streamlit.components.v1 as components
 import plotly.express as px
 import pandas as pd
 
@@ -26,8 +27,8 @@ load_dotenv()
 
 # ── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Budget Nudge Agent 💰",
-    page_icon="💰",
+    page_title="Financial Emotional Damage Simulator ✨",
+    page_icon="💀",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -36,37 +37,79 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .main { background-color: #0E1117; }
+    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&display=swap');
+
+    .main { background-color: #050505; }
+    h1, h2, h3 { font-family: 'Anton', sans-serif !important; text-transform: uppercase; letter-spacing: 1px; color: #ff0055 !important; }
+
     .risk-score-box {
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        background: linear-gradient(135deg, #2a0000, #1a0000);
         border-radius: 16px;
         padding: 24px;
         text-align: center;
-        border: 1px solid #2d2d5e;
+        border: 2px solid #ff0055;
+        box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);
     }
     .risk-number {
-        font-size: 72px;
+        font-size: 80px;
         font-weight: 900;
         line-height: 1;
+        font-family: 'Anton', sans-serif;
     }
     .nudge-box {
-        background: linear-gradient(135deg, #1e3a5f, #0d2137);
-        border-left: 4px solid #4fc3f7;
+        background: linear-gradient(135deg, #1a0033, #0d001a);
+        border-left: 6px solid #ff0055;
         border-radius: 12px;
-        padding: 20px 24px;
-        font-size: 18px;
-        font-style: italic;
-        color: #e0f7fa;
+        padding: 24px;
+        font-size: 22px;
+        font-weight: 700;
+        color: #ffffff;
         margin-top: 12px;
+        font-family: 'Inter', sans-serif;
     }
     .personality-box {
-        background: linear-gradient(135deg, #1b2838, #2a1f3d);
+        background: linear-gradient(135deg, #001a33, #000d1a);
         border-radius: 12px;
         padding: 16px;
         text-align: center;
-        border: 1px solid #3d3060;
+        border: 2px solid #00aaff;
     }
-    .stMetric > div { background: #1a1a2e; border-radius: 10px; padding: 8px; }
+    .stMetric > div {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    /* Savage Overlay Text */
+    .savage-overlay {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        text-align: center;
+        width: 100%;
+        pointer-events: none;
+        animation: savage-zoom 2s ease-out forwards;
+    }
+
+    @keyframes savage-zoom {
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+        20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
+    }
+
+    .savage-text {
+        font-family: 'Anton', sans-serif;
+        font-size: 80px;
+        color: white;
+        text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055;
+        background: rgba(0,0,0,0.7);
+        padding: 20px;
+        border-radius: 20px;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -129,7 +172,7 @@ def send_otp_email(receiver_email: str, otp: str):
 
 def otp_login_screen():
     """Render the OTP login UI."""
-    st.markdown("## 💰 Budget Nudge Agent")
+    st.markdown("## 💀 Financial Emotional Damage Simulator")
     st.markdown("### 🔐 Secure OTP Login")
     st.markdown("---")
 
@@ -217,9 +260,9 @@ def dashboard_screen():
     # ── Header ─────────────────────────────────────────────────────────────
     col_logo, col_title, col_logout = st.columns([1, 6, 1])
     with col_logo:
-        st.markdown("# 💰")
+        st.markdown("# 💀")
     with col_title:
-        st.markdown("## AI-Powered Behavioral Budget Nudge Agent")
+        st.markdown("## ✨ Financial Emotional Damage Simulator ✨")
         st.caption(f"📧 Logged in as: {st.session_state.get('email', 'N/A')} &nbsp;|&nbsp; 📅 Jan 2024")
     with col_logout:
         if st.button("🚪 Logout"):
@@ -348,11 +391,64 @@ def dashboard_screen():
             tone=selected_tone,
         )
         st.session_state["nudge_data"] = nudge_data
+        st.session_state["trigger_overlay"] = True
 
-        # Trigger Notification & Sound on generation
-        st.toast(nudge_data["text"], icon="🚨" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "✅")
-        # Let Streamlit infer the format (supports local paths and URLs)
-        st.audio(nudge_data["sound"], autoplay=True)
+        # Trigger Notification
+        st.toast(nudge_data["text"], icon="🚨" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "💀")
+
+    # ── Emotional Damage Overlay Logic ────────────────────────────────────
+    if st.session_state.get("trigger_overlay"):
+        nudge_data = st.session_state["nudge_data"]
+
+        # Inject JS for Confetti and Sounds
+        overlay_html = f"""
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script>
+            // Play Claps
+            var clap = new Audio("{nudge_data['clap_sound']}");
+            clap.play();
+
+            // Play Personality Sound after a short delay
+            setTimeout(function() {{
+                var personality = new Audio("{nudge_data['personality_sound']}");
+                personality.play();
+            }}, 800);
+
+            // Trigger Confetti
+            confetti({{
+                particleCount: 200,
+                spread: 100,
+                origin: {{ y: 0.5 }},
+                colors: ['#ff0055', '#00aaff', '#ffffff']
+            }});
+        </script>
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            text-align: center;
+            width: 80%;
+            pointer-events: none;
+            font-family: 'Anton', sans-serif;
+            animation: savage-zoom 2.5s ease-out forwards;
+        ">
+            <div style="
+                font-size: 60px;
+                color: white;
+                text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0055;
+                background: rgba(0,0,0,0.8);
+                padding: 40px;
+                border-radius: 30px;
+                border: 4px solid #ff0055;
+            ">
+                {nudge_data['overlay_text'].replace('\n', '<br>')}
+            </div>
+        </div>
+        """
+        components.html(overlay_html, height=0)
+        st.session_state["trigger_overlay"] = False
 
     with nudge_col2:
         nudge_data = st.session_state.get("nudge_data", {})
