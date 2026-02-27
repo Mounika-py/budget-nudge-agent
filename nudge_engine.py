@@ -1,13 +1,32 @@
 """
 nudge_engine.py
 ---------------
-Generates AI-powered (or rule-based fallback) behavioral nudges.
+Generates AI-powered (or rule-based fallback) behavioral nudges with multimedia assets.
 """
 
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# ── Multimedia Assets ─────────────────────────────────────────────────────────
+
+# Using reliable memegen.link URLs for trending/classic memes
+# memegen.link is highly stable for automated tools.
+RISK_ASSETS = {
+    "Low": {
+        "meme": "https://api.memegen.link/images/stonks.png",  # Stonks
+        "sound": "https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg",
+    },
+    "Medium": {
+        "meme": "https://api.memegen.link/images/fine.png",  # This is Fine
+        "sound": "https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
+    },
+    "High": {
+        "meme": "https://api.memegen.link/images/ds.png",  # Disappointed Stock Guy (ds)
+        "sound": "https://actions.google.com/sounds/v1/emergency/emergency_siren_short_burst.ogg",
+    },
+}
 
 # ── Rule-based nudge library ──────────────────────────────────────────────────
 
@@ -97,18 +116,32 @@ def generate_nudge(
     personality: str,
     overspend_amount: float,
     tone: str = "Supportive Coach",
-) -> tuple[str, bool]:
+) -> dict:
     """
-    Generate a behavioral nudge message.
+    Generate a behavioral nudge with multimedia assets.
 
     Returns:
-        (nudge_text, used_ai) — nudge string and whether AI was used
+        dict: {
+            "text": str,
+            "image": str (URL),
+            "sound": str (URL),
+            "used_ai": bool
+        }
     """
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    used_ai = False
 
     if api_key and api_key != "your_openai_api_key_here":
-        nudge = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
-        return nudge, True
+        nudge_text = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
+        used_ai = True
     else:
-        nudge = _rule_based_nudge(risk_level, tone)
-        return nudge, False
+        nudge_text = _rule_based_nudge(risk_level, tone)
+
+    assets = RISK_ASSETS.get(risk_level, RISK_ASSETS["Low"])
+
+    return {
+        "text": nudge_text,
+        "image": assets["meme"],
+        "sound": assets["sound"],
+        "used_ai": used_ai,
+    }
