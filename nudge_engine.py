@@ -42,18 +42,23 @@ SAVAGE_NUDGES = {
     "Financial Firestarter": [
         {
             "text": "Your salary had dreams. You had cravings. Swiggy has entered the chat. 💸",
-            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
+            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
             "overlay": "SALARY CREDITED... AND IT'S GONE."
+        },
+        {
+            "text": "Me watching my budget burn after ordering extra cheese. 🔥",
+            "meme": "assets/memes/english_funny.jpg",
+            "overlay": "BUDGET ON FIRE"
+        },
+        {
+            "text": "Congratulations! You've officially funded Swiggy's next IPO personally. 🏆",
+            "meme": "assets/memes/telugu_troll.jpg",
+            "overlay": "INVESTOR OF THE YEAR"
         },
         {
             "text": "Cause of death: Midnight biryani with 'no minimum order' confidence. ⚰️",
             "meme": "https://i.imgflip.com/2/4t0m5.jpg",
             "overlay": "BANK BALANCE FUNERAL"
-        },
-        {
-            "text": "You bought vegetables once. You ordered food 11 times. Delulu is not the solulu. 🤡",
-            "meme": "https://api.memegen.link/images/clown/I_will_cook_at_home/this_month.png",
-            "overlay": "I'LL COOK AT HOME 🤡"
         }
     ],
     "Average Enjoyer": [
@@ -63,31 +68,41 @@ SAVAGE_NUDGES = {
             "overlay": "SWIGGY: I CHANGED 🥺"
         },
         {
-            "text": "You don't have a spending problem. You have a 'treat yourself' addiction. 🧐",
-            "meme": "https://i.imgflip.com/4/3lmzyx.jpg",
-            "overlay": "ME SAYING 'LAST ORDER' FOR THE 8TH TIME"
+            "text": "Me looking at my bank statement like... why am I like this? 🤡",
+            "meme": "assets/memes/monkey_facepalm.webp",
+            "overlay": "FINANCIAL REGRET"
         },
         {
-            "text": "It all started with 'free delivery above ₹199'. Now look at you. 📉",
-            "meme": "https://i.imgflip.com/4/3lmzyx.jpg",
-            "overlay": "MY VILLAIN ORIGIN STORY"
+            "text": "You don't have a spending problem. You have a 'treat yourself' addiction. 🧐",
+            "meme": "assets/memes/english_roast.jpeg",
+            "overlay": "POINTING OUT THE TRUTH"
+        },
+        {
+            "text": "When the delivery guy knows your WiFi password better than you. 📶",
+            "meme": "assets/memes/monkey_angry.jpeg",
+            "overlay": "STOP ORDERING ALREADY"
         }
     ],
     "Ascetic Legend": [
         {
             "text": "She didn't raise you for ₹320 garlic bread. Imagine the disappointment. 🎭",
-            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
-            "overlay": "MOM WATCHING YOUR STATEMENT"
+            "meme": "assets/memes/telugu_brahmi_troll.jpeg",
+            "overlay": "MOM'S DISAPPOINTMENT"
         },
         {
-            "text": "You're bulking. Financially. Gym membership unused, Zomato history abused. 🏋️‍♂️",
-            "meme": "https://i.imgflip.com/1/305z6.jpg",
-            "overlay": "GYM: ₹1500 UNUSED | FOOD: ₹7800 USED"
+            "text": "Be that damn penguin. Run away from the delivery apps. 🐧",
+            "meme": "assets/memes/penguin_sarcastic.jpeg",
+            "overlay": "FINANCIAL FREEDOM"
         },
         {
-            "text": "Your money works hard. You send it to butter chicken. Your bank balance is running away. 🏃‍♂️",
-            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7ZetIsj68qc0U6_C/giphy.gif",
-            "overlay": "BANK BALANCE ESCAPING"
+            "text": "Running away from my responsibilities and my empty savings account. 🏔️",
+            "meme": "assets/memes/penguin_disappointed.jpeg",
+            "overlay": "RUNNING TO THE MOUNTAINS"
+        },
+        {
+            "text": "Your money works hard. You send it to butter chicken. 🍗",
+            "meme": "assets/memes/telugu_funny.jpeg",
+            "overlay": "WHY ARE YOU LIKE THIS"
         }
     ]
 }
