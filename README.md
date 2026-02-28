@@ -1,6 +1,25 @@
-# 💰 AI-Powered Behavioral Budget Nudge Agent
+# ✨ Financial Emotional Damage Simulator ✨
 
-> A behavioral finance intelligence app that analyzes spending patterns, detects personality types, and delivers AI-powered nudges to improve financial health.
+> **"Our AI doesn't just track spending. It emotionally damages you into financial discipline."**
+
+---
+
+## 📄 PROOF OF CONCEPT (POC)
+
+### Real-Time Budget Nudge Agent: Behavioral Financial Intervention System
+
+#### 1️⃣ Executive Summary
+The Real-Time Budget Nudge Agent is a behavioral finance system that intervenes at the exact decision point of food delivery checkout. Unlike traditional budgeting tools that analyze expenses post-transaction, our system monitors category-based spending and triggers intelligent, personality-driven nudges before payment is completed.
+
+#### 2️⃣ Problem Statement
+Food delivery platforms such as Swiggy and Zomato have significantly increased impulse spending behavior among students and young professionals. Current tools provide post-spend analysis, but there is no real-time behavioral nudge system operating at checkout.
+
+#### 3️⃣ Proposed Solution
+We propose a Real-Time Budget Nudge Agent that:
+* Monitors food spending patterns using **Pandas**.
+* Detects overspending thresholds in real-time.
+* Triggers AI-generated "Emotional Damage" nudges at checkout via **OpenAI**.
+* Introduces optional OTP override friction.
 
 ---
 
@@ -8,147 +27,71 @@
 
 | Feature | Description |
 |---|---|
-| 🔐 OTP Login | Phone-based simulated OTP authentication |
-| 📊 Spending Analytics | Total spend, food ratio, overspend detection |
-| 🧠 Risk Score | Behavioral risk score (0–100) with classification |
-| 🎭 Personality Detection | Impulsive / Balanced / Disciplined spender detection |
-| 🤖 AI Nudges | OpenAI-powered nudges with 3 advisor tones |
-| 📈 Interactive Dashboard | Plotly charts + Streamlit metrics |
-| 🎮 Simulation Mode | Add virtual orders and watch risk update live |
-| 🏅 Gamification | Bronze / Silver / Gold Saver level progression |
+| 💀 **Emotional Damage** | Savage Gen-Z meme nudges that roast your spending habits. |
+| 📧 **Email Roasts** | Get your financial reality check sent directly to your inbox. |
+| 📊 **Spend Analytics** | Real-time tracking of your "Total Burn" and "Food Junkie" ratios. |
+| 🧠 **Risk Score** | Behavioral risk score (0–100) based on spending discipline. |
+| 🎭 **Personality Detection** | Are you a *Financial Firestarter* or an *Ascetic Legend*? |
+| 🎮 **Doom Simulation** | Add virtual orders and watch your financial ruin in real-time. |
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup Instructions (For Beginners)
 
-### 1. Clone / Download the project
+### 1. Clone the project
 ```bash
 git clone https://github.com/yourname/budget-nudge-agent
 cd budget-nudge-agent
 ```
 
 ### 2. Install dependencies
+Copy and paste this command:
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Configure environment
-```bash
-cp .env.example .env
-# Edit .env and add your OpenAI API key (optional)
+1. Create a file named `.env` in the root folder.
+2. Paste the following and fill in your details:
+```env
+OPENAI_API_KEY=sk-...your-key-here...
+EMAIL_SENDER=your_gmail@gmail.com
+EMAIL_APP_PASSWORD=your_app_password_here
 ```
+> **Note:** For Gmail, you must use an [App Password](https://myaccount.google.com/apppasswords).
 
 ### 4. Run the app
+Paste this command to launch the dashboard:
 ```bash
 streamlit run app.py
 ```
 
 ---
 
-## 🔑 Adding OpenAI API Key
+## 🔑 Demo Login
 
-1. Go to [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-2. Create a new secret key
-3. Add it to your `.env` file:
-   ```
-   OPENAI_API_KEY=sk-...your-key-here...
-   ```
-
-> **Without a key**, the app automatically uses rule-based nudges — no features are lost!
-
----
-
-## 📱 Demo Login Credentials
-
-| Phone | OTP |
+| Email | OTP |
 |---|---|
-| 9999999999 | (shown on screen) |
-| 8888888888 | (shown on screen) |
-| 7777777777 | (shown on screen) |
-
-OTPs are randomly generated and displayed on screen for hackathon demo purposes.
+| `demo@example.com` | (shown on screen or sent to email) |
 
 ---
 
 ## 📁 Project Structure
 
-```
-budget-nudge-agent/
-│
-├── app.py                  # Main Streamlit app & UI router
-├── risk_engine.py          # Analytics + risk score calculation
-├── personality_engine.py   # Spending personality detection
-├── nudge_engine.py         # AI nudge generation (OpenAI + fallback)
-│
-├── data/
-│   └── mouni.csv           # Mock transaction data (Jan 2024)
-│
-├── .env.example            # Environment variable template
-├── requirements.txt        # Python dependencies
-└── README.md               # This file
-```
+* `app.py`: Main Dashboard & "Emotional Damage" UI.
+* `nudge_engine.py`: The "Savage Roaster" logic & Meme library.
+* `personality_engine.py`: Classifies you into savage personality types.
+* `risk_engine.py`: Calculates your financial doom (Risk Score).
+* `data/mouni.csv`: Sample transaction history.
 
 ---
 
-## 🧮 Risk Score Formula
-
-```
-food_ratio     = food_spend / total_spend
-overspend_ratio = max(0, total_spend - budget) / budget
-
-risk_score = (food_ratio × 50) + (overspend_ratio × 50)
-risk_score = min(risk_score, 100)
-```
-
-| Score | Level |
-|---|---|
-| 0–30 | 🟢 Low |
-| 31–60 | 🟡 Medium |
-| 61–100 | 🔴 High |
+## 💀 Savage Meme Nudges Included
+* "Your salary had dreams. You had cravings. Swiggy has entered the chat."
+* "Cause of death: Midnight biryani with 'no minimum order' confidence."
+* "She didn't raise you for ₹320 garlic bread."
+* ...and many more to ensure maximum emotional damage!
 
 ---
 
-## 🏅 Gamification Levels
-
-| Level | Condition |
-|---|---|
-| 🥇 Gold Saver | Risk Score < 15 |
-| 🥈 Silver Saver | Risk Score < 25 |
-| 🥉 Bronze Saver | Risk Score < 40 |
-| 🌱 Beginner | Risk Score ≥ 40 |
-
----
-
-## 🔮 Future Scalability
-
-- **Bank Integration**: Connect real UPI/bank APIs (Plaid, Setu, Fi Money)
-- **Multi-user Support**: Firebase/Supabase backend with real auth
-- **Weekly Reports**: Automated email nudges via SendGrid
-- **ML Personality Model**: Train on real behavioral data for better classification
-- **Budget Goals**: Let users set category-wise monthly budgets
-- **WhatsApp Nudges**: Send nudges via Twilio WhatsApp API
-- **Voice Mode**: Integrate ElevenLabs for spoken nudges
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend**: Streamlit
-- **Data**: Pandas
-- **Visualization**: Plotly
-- **AI**: OpenAI GPT-3.5 (with rule-based fallback)
-- **Config**: python-dotenv
-
----
-
-## ☁️ Deploy to Streamlit Cloud
-
-1. Push to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Connect repo → set `app.py` as entry point
-4. Add `OPENAI_API_KEY` in Secrets settings
-5. Deploy 🚀
-
----
-
-*Built for Hackathon 2024 — Behavioral Finance × AI*
+*Built for Hackathon 2024 — Behavioral Finance × Emotional Damage*
