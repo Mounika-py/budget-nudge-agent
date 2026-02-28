@@ -94,4 +94,4 @@ streamlit run app.py
 
 ---
 
-*Built for Hackathon 2024 — Behavioral Finance × Emotional Damage*
+*Built for Hackathon 2025 — Behavioral Finance × Emotional Damage*
