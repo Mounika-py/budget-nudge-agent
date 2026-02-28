@@ -29,59 +29,68 @@ DEFAULT_ASSETS = {
     },
 }
 
-# Savage Gen-Z Nudges
-SAVAGE_NUDGES = [
-    {
-        "text": "Your salary had dreams. You had cravings. Swiggy has entered the chat. 💸",
-        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "Cause of death: Midnight biryani with 'no minimum order' confidence. ⚰️",
-        "image": "https://i.imgflip.com/2/4t0m5.jpg", # Grim Reaper knocking on doors
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "You bought vegetables once. You ordered food 11 times. Delulu is not the solulu. 🤡",
-        "image": "https://api.memegen.link/images/clown/I_will_cook_at_home/this_month.png",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "This relationship with Swiggy is one-sided. You pay. They deliver. Regret arrives free. 💔",
-        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "You don't have a spending problem. You have a 'treat yourself' addiction. 🧐",
-        "image": "https://i.imgflip.com/4/3lmzyx.jpg",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "She didn't raise you for ₹320 garlic bread. Imagine the disappointment. 🎭",
-        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif", # placeholder
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "You're bulking. Financially. Gym membership unused, Zomato history abused. 🏋️‍♂️",
-        "image": "https://i.imgflip.com/1/305z6.jpg", # Drake hotline bling
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "At this point, the delivery guy knows your WiFi password. 'Last order' my foot. 🤡",
-        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/x0npYExCGOAP6/giphy.gif",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "It all started with 'free delivery above ₹199'. Now look at you. 📉",
-        "image": "https://i.imgflip.com/4/3lmzyx.jpg",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    },
-    {
-        "text": "Your money works hard. You send it to butter chicken. Your bank balance is running away. 🏃‍♂️",
-        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7ZetIsj68qc0U6_C/giphy.gif",
-        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
-    }
-]
+# Sound assets
+PERSONALITY_SOUNDS = {
+    "Financial Firestarter": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3",
+    "Average Enjoyer": "https://www.myinstants.com/media/sounds/bruh.mp3",
+    "Ascetic Legend": "https://www.myinstants.com/media/sounds/gta-san-andreas-mission-passed.mp3",
+}
+CLAP_SOUND = "https://www.myinstants.com/media/sounds/clapping.mp3"
+
+# Savage Gen-Z Nudges (Categorized by Personality)
+SAVAGE_NUDGES = {
+    "Financial Firestarter": [
+        {
+            "text": "Your salary had dreams. You had cravings. Swiggy has entered the chat. 💸",
+            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
+            "overlay": "SALARY CREDITED... AND IT'S GONE."
+        },
+        {
+            "text": "Cause of death: Midnight biryani with 'no minimum order' confidence. ⚰️",
+            "meme": "https://i.imgflip.com/2/4t0m5.jpg",
+            "overlay": "BANK BALANCE FUNERAL"
+        },
+        {
+            "text": "You bought vegetables once. You ordered food 11 times. Delulu is not the solulu. 🤡",
+            "meme": "https://api.memegen.link/images/clown/I_will_cook_at_home/this_month.png",
+            "overlay": "I'LL COOK AT HOME 🤡"
+        }
+    ],
+    "Average Enjoyer": [
+        {
+            "text": "This relationship with Swiggy is one-sided. You pay. They deliver. Regret arrives free. 💔",
+            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
+            "overlay": "SWIGGY: I CHANGED 🥺"
+        },
+        {
+            "text": "You don't have a spending problem. You have a 'treat yourself' addiction. 🧐",
+            "meme": "https://i.imgflip.com/4/3lmzyx.jpg",
+            "overlay": "ME SAYING 'LAST ORDER' FOR THE 8TH TIME"
+        },
+        {
+            "text": "It all started with 'free delivery above ₹199'. Now look at you. 📉",
+            "meme": "https://i.imgflip.com/4/3lmzyx.jpg",
+            "overlay": "MY VILLAIN ORIGIN STORY"
+        }
+    ],
+    "Ascetic Legend": [
+        {
+            "text": "She didn't raise you for ₹320 garlic bread. Imagine the disappointment. 🎭",
+            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
+            "overlay": "MOM WATCHING YOUR STATEMENT"
+        },
+        {
+            "text": "You're bulking. Financially. Gym membership unused, Zomato history abused. 🏋️‍♂️",
+            "meme": "https://i.imgflip.com/1/305z6.jpg",
+            "overlay": "GYM: ₹1500 UNUSED | FOOD: ₹7800 USED"
+        },
+        {
+            "text": "Your money works hard. You send it to butter chicken. Your bank balance is running away. 🏃‍♂️",
+            "meme": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7ZetIsj68qc0U6_C/giphy.gif",
+            "overlay": "BANK BALANCE ESCAPING"
+        }
+    ]
+}
 
 def get_assets(risk_level: str) -> dict:
     """
@@ -209,29 +218,26 @@ def generate_nudge(
             "text": str,
             "image": str (URL),
             "sound": str (URL),
+            "personality_sound": str (URL),
+            "clap_sound": str (URL),
+            "overlay_text": str,
             "used_ai": bool
         }
     """
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
     used_ai = False
 
+    # Selection for savage library
+    savage_options = SAVAGE_NUDGES.get(personality, SAVAGE_NUDGES["Average Enjoyer"])
+    savage_nudge = random.choice(savage_options)
+
     if tone == "Savage Roaster":
-        # Always pick from the savage library for maximum impact if not using AI
-        # Or if AI is enabled, it will use the savage prompt.
         if api_key and api_key != "your_openai_api_key_here":
             nudge_text = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
             used_ai = True
-            assets = get_assets(risk_level) # use standard assets for AI
-            # Randomly mix in a savage sound if savage
-            assets["sound"] = "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
         else:
-            choice = random.choice(SAVAGE_NUDGES)
-            return {
-                "text": choice["text"],
-                "image": choice["image"],
-                "sound": choice["sound"],
-                "used_ai": False
-            }
+            nudge_text = savage_nudge["text"]
+        assets = get_assets(risk_level)
     else:
         if api_key and api_key != "your_openai_api_key_here":
             nudge_text = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
@@ -242,7 +248,10 @@ def generate_nudge(
 
     return {
         "text": nudge_text,
-        "image": assets["meme"],
+        "image": savage_nudge["meme"] if tone == "Savage Roaster" else assets["meme"],
         "sound": assets["sound"],
+        "personality_sound": PERSONALITY_SOUNDS.get(personality, PERSONALITY_SOUNDS["Average Enjoyer"]),
+        "clap_sound": CLAP_SOUND,
+        "overlay_text": savage_nudge["overlay"],
         "used_ai": used_ai,
     }

@@ -15,6 +15,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 import streamlit as st
+import streamlit.components.v1 as components
 import plotly.express as px
 import pandas as pd
 
@@ -58,6 +59,18 @@ st.markdown(
         font-style: italic;
         color: #e0f7fa;
         margin-top: 12px;
+        position: relative;
+    }
+    .overlay-text {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 5px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
     }
     .personality-box {
         background: linear-gradient(135deg, #1b2838, #2a1f3d);
@@ -390,9 +403,51 @@ def dashboard_screen():
         )
         st.session_state["nudge_data"] = nudge_data
 
-        # Trigger Notification & Sound on generation
+        # ── Visual/Audio Effects Injection ──
+        # Inject JavaScript for synchronized audio and confetti
+        components.html(
+            f"""
+            <script>
+            function playSound(url) {{
+                const audio = new Audio(url);
+                audio.play();
+            }}
+            // Play Sounds sequentially
+            playSound("{nudge_data['clap_sound']}");
+            setTimeout(() => playSound("{nudge_data['personality_sound']}"), 1000);
+
+            // Trigger Confetti for low risk
+            if ("{risk_level}" === "Low") {{
+                const duration = 3 * 1000;
+                const end = Date.now() + duration;
+                (function frame() {{
+                    confetti({{
+                        particleCount: 2,
+                        angle: 60,
+                        spread: 55,
+                        origin: {{ x: 0 }},
+                        colors: ['#21C55D', '#ffffff']
+                    }});
+                    confetti({{
+                        particleCount: 2,
+                        angle: 120,
+                        spread: 55,
+                        origin: {{ x: 1 }},
+                        colors: ['#21C55D', '#ffffff']
+                    }});
+                    if (Date.now() < end) {{
+                        requestAnimationFrame(frame);
+                    }}
+                }}());
+            }}
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+            """,
+            height=0,
+        )
+
+        # Trigger Notification on generation
         st.toast(nudge_data["text"], icon="💀" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "✅")
-        st.audio(nudge_data["sound"], autoplay=True)
 
     with nudge_col2:
         nudge_data = st.session_state.get("nudge_data", {})
@@ -402,7 +457,12 @@ def dashboard_screen():
         n_col_text, n_col_img = st.columns([2, 1])
         with n_col_text:
             st.markdown(
-                f'<div class="nudge-box">"{nudge_data.get("text", "")}"</div>',
+                f"""
+                <div class="nudge-box">
+                    <div class="overlay-text">{nudge_data.get("overlay_text", "")}</div>
+                    "{nudge_data.get("text", "")}"
+                </div>
+                """,
                 unsafe_allow_html=True,
             )
             # Email roast button
