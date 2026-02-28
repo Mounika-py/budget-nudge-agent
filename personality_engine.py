@@ -17,25 +17,25 @@ def detect_personality(food_ratio: float) -> dict:
     """
     if food_ratio > 0.40:
         return {
-            "name": "Impulsive Spender",
+            "name": "Financial Firestarter",
             "emoji": "🔥",
-            "description": "You live for food and order without thinking twice!",
+            "description": "You're literally burning your future for butter chicken. Swiggy's favorite victim.",
             "confidence": min(99, int(food_ratio * 150)),
             "color": "#FF4B4B",
         }
     elif food_ratio > 0.25:
         return {
-            "name": "Balanced Spender",
+            "name": "Average Enjoyer",
             "emoji": "⚖️",
-            "description": "You enjoy food but keep other expenses in check.",
+            "description": "Basic. You spend enough to feel regret, but not enough to be legendary.",
             "confidence": min(99, int(70 + food_ratio * 50)),
             "color": "#F0A500",
         }
     else:
         return {
-            "name": "Disciplined Saver",
+            "name": "Ascetic Legend",
             "emoji": "🧘",
-            "description": "You treat your wallet like a sacred temple. Impressive!",
+            "description": "Your self-control is scary. Are you even human or just a savings bot?",
             "confidence": min(99, int((0.25 - food_ratio) * 300 + 60)),
             "color": "#21C55D",
         }
@@ -45,5 +45,5 @@ def detect_personality(food_ratio: float) -> dict:
 ADVISOR_TONES = {
     "Supportive Coach": "supportive",
     "Strict Advisor": "strict",
-    "Sarcastic Friend": "sarcastic",
+    "Savage Roaster": "savage",
 }

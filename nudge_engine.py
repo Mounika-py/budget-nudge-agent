@@ -5,6 +5,7 @@ Generates AI-powered (or rule-based fallback) behavioral nudges with multimedia 
 """
 
 import os
+import random
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -27,6 +28,60 @@ DEFAULT_ASSETS = {
         "sound": "https://actions.google.com/sounds/v1/emergency/emergency_siren_short_burst.ogg",
     },
 }
+
+# Savage Gen-Z Nudges
+SAVAGE_NUDGES = [
+    {
+        "text": "Your salary had dreams. You had cravings. Swiggy has entered the chat. 💸",
+        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "Cause of death: Midnight biryani with 'no minimum order' confidence. ⚰️",
+        "image": "https://i.imgflip.com/2/4t0m5.jpg", # Grim Reaper knocking on doors
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "You bought vegetables once. You ordered food 11 times. Delulu is not the solulu. 🤡",
+        "image": "https://api.memegen.link/images/clown/I_will_cook_at_home/this_month.png",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "This relationship with Swiggy is one-sided. You pay. They deliver. Regret arrives free. 💔",
+        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "You don't have a spending problem. You have a 'treat yourself' addiction. 🧐",
+        "image": "https://i.imgflip.com/4/3lmzyx.jpg",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "She didn't raise you for ₹320 garlic bread. Imagine the disappointment. 🎭",
+        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKDkDbIDJieKbVm/giphy.gif", # placeholder
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "You're bulking. Financially. Gym membership unused, Zomato history abused. 🏋️‍♂️",
+        "image": "https://i.imgflip.com/1/305z6.jpg", # Drake hotline bling
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "At this point, the delivery guy knows your WiFi password. 'Last order' my foot. 🤡",
+        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/x0npYExCGOAP6/giphy.gif",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "It all started with 'free delivery above ₹199'. Now look at you. 📉",
+        "image": "https://i.imgflip.com/4/3lmzyx.jpg",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    },
+    {
+        "text": "Your money works hard. You send it to butter chicken. Your bank balance is running away. 🏃‍♂️",
+        "image": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXZueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpueXpuJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7ZetIsj68qc0U6_C/giphy.gif",
+        "sound": "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+    }
+]
 
 def get_assets(risk_level: str) -> dict:
     """
@@ -71,7 +126,7 @@ RULE_BASED_NUDGES = {
         "Medium": "Your spending is borderline reckless. Immediate correction required.",
         "High": "STOP. You have blown your budget. No more food orders this month.",
     },
-    "sarcastic": {
+    "savage": {
         "Low": "Oh wow, you only spent a little? Should we give you a medal? 🏅",
         "Medium": "Halfway to broke — impressive achievement unlocked! 🎮",
         "High": "Congrats! Your wallet is now officially on life support. Swiggy thanks you! 🍕",
@@ -84,7 +139,7 @@ def _rule_based_nudge(risk_level: str, tone: str) -> str:
     tone_map = {
         "Supportive Coach": "supportive",
         "Strict Advisor": "strict",
-        "Sarcastic Friend": "sarcastic",
+        "Savage Roaster": "savage",
     }
     tone_key = tone_map.get(tone, "supportive")
     return RULE_BASED_NUDGES[tone_key][risk_level]
@@ -109,7 +164,7 @@ def _openai_nudge(
         tone_instructions = {
             "Supportive Coach": "Be warm, encouraging, and empathetic.",
             "Strict Advisor": "Be firm, direct, and no-nonsense.",
-            "Sarcastic Friend": "Be witty, sarcastic, but ultimately helpful.",
+            "Savage Roaster": "Be absolutely savage, use Gen-Z slang, and deliver 'emotional damage' about their spending habits. Mention Swiggy/Zomato.",
         }
 
         prompt = (
@@ -160,13 +215,30 @@ def generate_nudge(
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
     used_ai = False
 
-    if api_key and api_key != "your_openai_api_key_here":
-        nudge_text = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
-        used_ai = True
+    if tone == "Savage Roaster":
+        # Always pick from the savage library for maximum impact if not using AI
+        # Or if AI is enabled, it will use the savage prompt.
+        if api_key and api_key != "your_openai_api_key_here":
+            nudge_text = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
+            used_ai = True
+            assets = get_assets(risk_level) # use standard assets for AI
+            # Randomly mix in a savage sound if savage
+            assets["sound"] = "https://www.myinstants.com/media/sounds/emotional-damage-meme.mp3"
+        else:
+            choice = random.choice(SAVAGE_NUDGES)
+            return {
+                "text": choice["text"],
+                "image": choice["image"],
+                "sound": choice["sound"],
+                "used_ai": False
+            }
     else:
-        nudge_text = _rule_based_nudge(risk_level, tone)
-
-    assets = get_assets(risk_level)
+        if api_key and api_key != "your_openai_api_key_here":
+            nudge_text = _openai_nudge(risk_score, risk_level, personality, overspend_amount, tone)
+            used_ai = True
+        else:
+            nudge_text = _rule_based_nudge(risk_level, tone)
+        assets = get_assets(risk_level)
 
     return {
         "text": nudge_text,

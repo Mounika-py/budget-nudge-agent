@@ -1,7 +1,7 @@
 """
 app.py
 ------
-AI-Powered Behavioral Budget Nudge Agent
+Financial Emotional Damage Simulator
 Main Streamlit application entry point.
 
 Run with: streamlit run app.py
@@ -26,8 +26,8 @@ load_dotenv()
 
 # ── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Budget Nudge Agent 💰",
-    page_icon="💰",
+    page_title="Financial Emotional Damage Simulator 📉💀",
+    page_icon="💀",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -98,18 +98,18 @@ def send_otp_email(receiver_email: str, otp: str):
         smtp_port = 587
 
         message = MIMEMultipart()
-        message["From"] = sender_email
+        message["From"] = f"Emotional Damage Simulator <{sender_email}>"
         message["To"] = receiver_email
-        message["Subject"] = "Your Budget Nudge Agent OTP"
+        message["Subject"] = "Your Financial Roast Access Code"
 
         body = f"""
         <html>
         <body>
-            <h3>💰 Budget Nudge Agent</h3>
+            <h3>💀 Financial Emotional Damage Simulator</h3>
             <p>Your Secure OTP is: <b>{otp}</b></p>
-            <p>This code is valid for 5 minutes.</p>
+            <p>Enter this to see how badly you're failing your budget.</p>
             <hr/>
-            <p><small>If you didn't request this, please ignore this email.</small></p>
+            <p><small>If you didn't request this roast, please ignore this email.</small></p>
         </body>
         </html>
         """
@@ -127,10 +127,50 @@ def send_otp_email(receiver_email: str, otp: str):
         return False, f"Email Error: {str(e)}"
 
 
+def send_dashboard_notification(receiver_email: str, nudge_text: str):
+    """Send the 'Emotional Damage' roast via email."""
+    sender_email = os.getenv("EMAIL_SENDER")
+    sender_password = os.getenv("EMAIL_APP_PASSWORD")
+
+    if not sender_email or not sender_password:
+        return False, "Email credentials missing."
+
+    try:
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
+        message = MIMEMultipart()
+        message["From"] = f"Emotional Damage Agent 💀 <{sender_email}>"
+        message["To"] = receiver_email
+        message["Subject"] = "🚨 URGENT: Your Financial Reality Check"
+
+        body = f"""
+        <html>
+        <body>
+            <h2 style='color: #FF4B4B;'>💀 FINANCIAL EMOTIONAL DAMAGE RECEIVED</h2>
+            <p style='font-size: 18px; font-style: italic;'>"{nudge_text}"</p>
+            <p>Stop everything. Check your dashboard before you're completely broke.</p>
+            <br/>
+            <a href='https://emotional-damage-simulator.streamlit.app' style='background: #FF4B4B; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>OPEN DASHBOARD</a>
+            <hr/>
+            <p><small>Sent by the Financial Emotional Damage Simulator.</small></p>
+        </body>
+        </html>
+        """
+        message.attach(MIMEText(body, "html"))
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.send_message(message)
+        server.quit()
+        return True, "Roast emailed successfully!"
+    except Exception as e:
+        return False, f"Email Error: {str(e)}"
+
+
 def otp_login_screen():
     """Render the OTP login UI."""
-    st.markdown("## 💰 Budget Nudge Agent")
-    st.markdown("### 🔐 Secure OTP Login")
+    st.markdown("## ✨ Financial Emotional Damage Simulator ✨")
+    st.markdown("### 🔐 Enter the Roast Zone")
     st.markdown("---")
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -217,9 +257,9 @@ def dashboard_screen():
     # ── Header ─────────────────────────────────────────────────────────────
     col_logo, col_title, col_logout = st.columns([1, 6, 1])
     with col_logo:
-        st.markdown("# 💰")
+        st.markdown("# 📉💀")
     with col_title:
-        st.markdown("## AI-Powered Behavioral Budget Nudge Agent")
+        st.markdown("## ✨ Financial Emotional Damage Simulator ✨")
         st.caption(f"📧 Logged in as: {st.session_state.get('email', 'N/A')} &nbsp;|&nbsp; 📅 Jan 2024")
     with col_logout:
         if st.button("🚪 Logout"):
@@ -233,13 +273,13 @@ def dashboard_screen():
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.metric(
-            "💳 Total Spend",
+            "💳 Total Burn",
             f"₹{analytics['total_spend']:,.0f}",
             delta=f"₹{analytics['overspend_amount']:,.0f} over budget" if analytics["overspend_amount"] > 0 else "Within budget",
             delta_color="inverse",
         )
     with m2:
-        st.metric("🍕 Food Spend", f"₹{analytics['food_spend']:,.0f}")
+        st.metric("🍕 Food Junkie Spend", f"₹{analytics['food_spend']:,.0f}")
     with m3:
         st.metric("🎯 Monthly Budget", f"₹{analytics['budget']:,}")
     with m4:
@@ -257,7 +297,7 @@ def dashboard_screen():
         st.markdown(
             f"""
             <div class="risk-score-box">
-                <div style="color: #aaa; font-size: 14px; margin-bottom: 8px;">BEHAVIORAL RISK SCORE</div>
+                <div style="color: #aaa; font-size: 14px; margin-bottom: 8px;">EMOTIONAL DAMAGE POTENTIAL</div>
                 <div class="risk-number" style="color: {risk_color};">{risk_score}</div>
                 <div style="font-size: 22px; font-weight: 700; color: {risk_color}; margin-top: 6px;">
                     {risk_level} Risk
@@ -312,7 +352,7 @@ def dashboard_screen():
             pie_df,
             names="Category",
             values="Amount",
-            title="💰 Spending Breakdown by Category",
+            title="💰 Where is your money dying?",
             hole=0.4,
             color_discrete_sequence=px.colors.qualitative.Set3,
         )
@@ -328,16 +368,17 @@ def dashboard_screen():
     st.markdown("---")
 
     # ── ROW 3: Nudge Generator ─────────────────────────────────────────────
-    st.markdown("### 🤖 AI Behavioral Nudge")
+    st.markdown("### 🤖 Behavioral Roast Generator")
 
     nudge_col1, nudge_col2 = st.columns([1, 3])
     with nudge_col1:
         selected_tone = st.selectbox(
             "🎭 Advisor Tone",
             list(ADVISOR_TONES.keys()),
-            help="Choose how your financial advisor should speak to you",
+            help="Choose how your financial advisor should roast you",
+            index=2 # Default to Savage Roaster
         )
-        generate_btn = st.button("⚡ Generate Nudge", use_container_width=True, type="primary")
+        generate_btn = st.button("⚡ Generate Roast", use_container_width=True, type="primary")
 
     if generate_btn or "nudge_data" not in st.session_state:
         nudge_data = generate_nudge(
@@ -350,36 +391,42 @@ def dashboard_screen():
         st.session_state["nudge_data"] = nudge_data
 
         # Trigger Notification & Sound on generation
-        st.toast(nudge_data["text"], icon="🚨" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "✅")
-        # Let Streamlit infer the format (supports local paths and URLs)
+        st.toast(nudge_data["text"], icon="💀" if risk_level == "High" else "⚠️" if risk_level == "Medium" else "✅")
         st.audio(nudge_data["sound"], autoplay=True)
 
     with nudge_col2:
         nudge_data = st.session_state.get("nudge_data", {})
-        ai_badge = "🤖 AI-Generated" if nudge_data.get("used_ai") else "📋 Rule-Based"
+        ai_badge = "🤖 AI-Roasted" if nudge_data.get("used_ai") else "📋 Pre-cooked Roast"
         st.caption(ai_badge)
 
-        n_col1, n_col2 = st.columns([2, 1])
-        with n_col1:
+        n_col_text, n_col_img = st.columns([2, 1])
+        with n_col_text:
             st.markdown(
                 f'<div class="nudge-box">"{nudge_data.get("text", "")}"</div>',
                 unsafe_allow_html=True,
             )
-        with n_col2:
+            # Email roast button
+            if st.button("📧 Email me this Roast"):
+                success, msg = send_dashboard_notification(st.session_state["email"], nudge_data["text"])
+                if success:
+                    st.success(msg)
+                else:
+                    st.error(msg)
+        with n_col_img:
             if nudge_data.get("image"):
                 st.image(nudge_data["image"], use_container_width=True)
 
     st.markdown("---")
 
     # ── ROW 4: Simulation Mode ─────────────────────────────────────────────
-    st.markdown("### 🎮 Simulation Mode")
+    st.markdown("### 🎮 Financial Doom Simulation")
 
     sim_col1, sim_col2 = st.columns([1, 3])
     with sim_col1:
         sim_amount = st.number_input("Simulate order (₹)", min_value=100, max_value=2000, value=500, step=100)
         sim_platform = st.selectbox("Platform", ["Swiggy", "Zomato", "Blinkit", "EatClub"])
 
-        if st.button(f"🛵 Add ₹{sim_amount} {sim_platform} Order", use_container_width=True):
+        if st.button(f"🛵 Order ₹{sim_amount} on {sim_platform}", use_container_width=True):
             st.session_state["extra_food"] = st.session_state.get("extra_food", 0.0) + sim_amount
             # Clear cached nudge so it regenerates
             if "nudge_data" in st.session_state:
@@ -387,8 +434,8 @@ def dashboard_screen():
             st.rerun()
 
         if st.session_state.get("extra_food", 0) > 0:
-            st.warning(f"⚡ Simulated: +₹{st.session_state['extra_food']:,.0f} food spend added")
-            if st.button("↩️ Reset Simulation"):
+            st.warning(f"⚡ Simulated Damage: +₹{st.session_state['extra_food']:,.0f}")
+            if st.button("↩️ Reset Financial Ruin"):
                 st.session_state["extra_food"] = 0.0
                 if "nudge_data" in st.session_state:
                     del st.session_state["nudge_data"]
@@ -396,7 +443,7 @@ def dashboard_screen():
 
     with sim_col2:
         # Show transaction history table
-        st.markdown("#### 📋 Transaction History")
+        st.markdown("#### 📋 Crimes Against your Wallet")
         display_df = df[["date", "platform", "category", "amount"]].copy()
         display_df["date"] = display_df["date"].dt.strftime("%d %b %Y")
         display_df["amount"] = display_df["amount"].apply(lambda x: f"₹{x:,.0f}")
